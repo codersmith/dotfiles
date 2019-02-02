@@ -1,0 +1,32 @@
+[DEFAULT]
+# See branch status
+brstat = ~/bin/my_git_ps1
+
+lbranch = 
+	   git branch -l -r | grep feature/$@ | sed 's;.*origin/\(feature.*\);\1;'
+
+# Create a branch for the first time in local and push to remote
+crbranch = 
+	   git checkout -b $@ &&
+	   git push --set-upstream-to=origin/$@ $@
+	   ~/bin/my_git_ps1
+
+# Checkout an existing branch
+cobranch = 
+	   git checkout $@ &&
+	   ~/bin/my_git_ps1
+
+# Update all repos using git pull --rebase
+update = git pull --rebase
+
+# Update branch from origin (e.g. if feature/mybr was created from track/gandalf, run the following to pull in changes
+# from track/gandalf into the feature branch
+#      $ mr cobranch feature/mybr     <<< Checkout the feature branch
+#      $ mr update                    <<< Make sure we have latest changes from feature branch
+#      $ mr brstat                    <<< Make sure we're not ahead of origin/feature/mybr (if so, consider pushing first)
+#      $ mr brrebase track/gandalf    <<< Rebase commits from feature branch onto latest code from origin/track/gandalf
+brrebase = 
+	   git rebase origin/$@
+
+gc = git gc
+
